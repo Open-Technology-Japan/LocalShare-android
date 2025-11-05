@@ -14,29 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.openTechJapan.myapplication.nsd.NsdService
 import com.openTechJapan.myapplication.ui.theme.LocalSharingTheme
 import org.webrtc.PeerConnectionFactory
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
+
+    val nsdService = NsdService()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val initializationOptions = PeerConnectionFactory.InitializationOptions
-            .builder(this)
-            .createInitializationOptions()
-
-// 2. WebRTCエンジンの初期化
-        PeerConnectionFactory.initialize(initializationOptions)
-
-// 3. PeerConnectionFactoryのインスタンスを作成
-        val options = PeerConnectionFactory.Options()
-        val factory = PeerConnectionFactory.builder()
-            .setOptions(options)
-            .createPeerConnectionFactory()
-
-
         Timber.plant(Timber.DebugTree())
+        nsdService.registerService(50000, this)
         enableEdgeToEdge()
         setContent {
             LocalSharingTheme {
